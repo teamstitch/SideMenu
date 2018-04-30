@@ -142,6 +142,7 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
             
             if let menuViewController = menuViewController, let visibleViewController = SideMenuTransition.visibleViewController {
                 interactive = true
+                visibleViewController.view.endEditing(true)
                 visibleViewController.present(menuViewController, animated: true, completion: nil)
             } else {
                 return
@@ -474,6 +475,7 @@ extension SideMenuTransition: UIViewControllerAnimatedTransitioning {
                 
                 if self.switchMenus {
                     self.switchMenus = false
+                    viewControllerForPresentedMenu?.view.endEditing(true)
                     viewControllerForPresentedMenu?.present(self.menuViewController!, animated: true, completion: nil)
                 }
                 
