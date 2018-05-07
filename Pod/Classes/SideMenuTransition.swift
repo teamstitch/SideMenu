@@ -183,6 +183,9 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
                 if ProcessInfo().operatingSystemVersion.majorVersion == 8 && percentComplete > 1 - CGFloat.ulpOfOne {
                     update(0.9999)
                 }
+                if let delegate = mainSideMenuDelegate {
+                    delegate.sideMenuInteractionProgress?(percent: 1.0, presenting: true)
+                }
                 finish()
             } else {
                 cancel()
@@ -217,6 +220,9 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
                 // bug workaround: animation briefly resets after call to finishInteractiveTransition() but before animateTransition completion is called.
                 if ProcessInfo().operatingSystemVersion.majorVersion == 8 && percentComplete > 1 - CGFloat.ulpOfOne {
                     update(0.9999)
+                }
+                if let delegate = mainSideMenuDelegate {
+                    delegate.sideMenuInteractionProgress?(percent: 1.0, presenting: false)
                 }
                 finish()
                 activeGesture = nil
