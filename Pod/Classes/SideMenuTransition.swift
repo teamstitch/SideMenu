@@ -30,6 +30,14 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
             return sideMenuManager.menuWidth
         }
     }
+    fileprivate var mainSideMenuDelegate: UISideMenuNavigationControllerDelegate? {
+        if let navVC = mainViewController as? UINavigationController {
+            return navVC.topViewController as? UISideMenuNavigationControllerDelegate
+        } else {
+            return mainViewController as? UISideMenuNavigationControllerDelegate
+        }
+    }
+    
     internal weak var sideMenuManager: SideMenuManager!
     internal weak var mainViewController: UIViewController?
     internal weak var menuViewController: UISideMenuNavigationController? {
@@ -264,6 +272,10 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
             menuView?.frame.origin.x = presentDirection == .left ? 0 : mainView!.frame.width - menuWidth
         }
         
+        if let delegate = mainSideMenuDelegate {
+            delegate.sideMenuAnimationStart?(presenting: false)
+        }
+        
         return self
     }
     
@@ -283,6 +295,10 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
             originalSuperview.addSubview(mainView)
             let y = originalSuperview.bounds.height - mainView.frame.size.height
             mainView.frame.origin.y = max(y, 0)
+        }
+        
+        if let delegate = mainSideMenuDelegate {
+            delegate.sideMenuAnimationEnd?(presenting: false)
         }
         
         originalSuperview = nil
@@ -344,6 +360,10 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
             mainView?.alpha = 1 - sideMenuManager.menuAnimationFadeStrength
         }
         
+        if let delegate = mainSideMenuDelegate {
+            delegate.sideMenuAnimationStart?(presenting: true)
+        }
+        
         return self
     }
     
@@ -367,6 +387,10 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
         }
         if let topNavigationController = mainViewController as? UINavigationController {
             topNavigationController.interactivePopGestureRecognizer!.isEnabled = false
+        }
+        
+        if let delegate = mainSideMenuDelegate {
+            delegate.sideMenuAnimationEnd?(presenting: true)
         }
         
         return self
@@ -552,6 +576,10 @@ extension SideMenuTransition: UIViewControllerAnimatedTransitioning {
         }
         
         super.update(percentComplete)
+        
+        if let delegate = mainSideMenuDelegate {
+            delegate.sideMenuInteractionProgress?(percent: percentComplete, presenting: presenting)
+        }
     }
     
 }

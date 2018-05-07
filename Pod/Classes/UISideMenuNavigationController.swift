@@ -12,6 +12,9 @@ import UIKit
     @objc optional func sideMenuDidAppear(menu: UISideMenuNavigationController, animated: Bool)
     @objc optional func sideMenuWillDisappear(menu: UISideMenuNavigationController, animated: Bool)
     @objc optional func sideMenuDidDisappear(menu: UISideMenuNavigationController, animated: Bool)
+    @objc optional func sideMenuInteractionProgress(percent: CGFloat, presenting: Bool)
+    @objc optional func sideMenuAnimationStart(presenting: Bool)
+    @objc optional func sideMenuAnimationEnd(presenting: Bool)
 }
 
 @objcMembers
